@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# FIXME: Is no longer present in py 3.13+
 import imghdr
-import urlquick
 
 from config import Config
 
@@ -29,6 +29,8 @@ def check_image(path):
     image_pp = ''
 
     if 'http' in path:
+        import urlquick
+
         image_pp += WEB + ' '
 
         if not Config.get('disable_image_check'):

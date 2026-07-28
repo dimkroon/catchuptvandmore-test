@@ -9,7 +9,7 @@ import time
 from importlib import import_module, reload
 from random import randint
 
-import mock
+from unittest import mock
 from auto_exploration import AutoExploration
 from config import Config
 # User modules imports

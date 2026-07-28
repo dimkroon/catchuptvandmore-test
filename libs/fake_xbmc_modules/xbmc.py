@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 
 from config import Config
 from custom_logger import CustomLogger
@@ -49,6 +50,29 @@ def log(msg, level=LOGDEBUG):
     pass
 
 
+def executebuiltin(function, wait=False):
+    pass
+
+
+def executeJSONRPC(jsonrpccommand):
+    cmd = json.loads(jsonrpccommand)
+    method = cmd['method']
+    return_val = ''
+    if method == 'Settings.GetSettingValue':
+        key = cmd['params']['setting']
+        return_val = {
+            'network.usehttpproxy': False,
+            'network.httpproxytype': 'HTTP',
+            'locale.timezone': 'Europe',
+        }.get(key)
+    resp = {
+        'jsonrpc': '2.0',
+        'id': cmd['id'],
+        'result': {'value': return_val}
+    }
+    return json.dumps(resp)
+
+
 def translatePath(path):
     return path
 
@@ -66,12 +90,36 @@ def getInfoLabel(id_):
     return ""
 
 
+def getCondVisibility(condition):
+    return False
+
+
 def getLocalizedString(id_):
     result = str(id_)
     if id_ in Config.get("xbmc_labels"):
         result = Config.get("xbmc_labels")[id_]
     log_.debug('getLocalizedString of "{}" --> "{}"'.format(id_, result))
     return result
+
+
+def getRegion(id):
+    """
+    Returns your regions setting as a string for the specified id.
+
+    :param str id: id of setting to return
+        One of: 'dateshort', 'datelong', 'time', 'meridiem', 'tempunit', 'speedunit'.
+    :return: Regional format
+
+    """
+    region = {
+        'dateshort': '%Y-%m-%d',
+        'datelong': '%A %B %d %Y',
+        'time': '%H:%M:%S',
+        'meridiem': '/',
+        'tempunit': '°C',
+        'speedunit': 'km/h'
+    }.get(id)
+    return region
 
 
 class Keyboard(object):
@@ -90,6 +138,163 @@ class Keyboard(object):
 
     def isConfirmed(self):
         return True
+
+
+class Monitor:
+    def __init__(self):
+        pass
+
+    def onSettingsChanged(self):
+        pass
+
+    def onScreensaverActivated(self):
+        pass
+
+    def onScreensaverDeactivated(self):
+        pass
+
+    def onDPMSActivated(self):
+        pass
+
+    def onDPMSDeactivated(self):
+        pass
+
+    def onScanStarted(self, library):
+        pass
+
+    def onScanFinished(self, library):
+        pass
+
+    def onCleanStarted(self, library):
+        pass
+
+    def onCleanFinished(self, library):
+        pass
+
+    def onNotification(self, sender, method, data):
+        pass
+
+    def waitForAbort(self, timeout=-1):
+        return True
+
+    def abortRequested(self):
+        return True
+
+
+class Player:
+    def __init__(self):
+        pass
+
+    def play(self, item="", listitem=None, windowed=False, startpos=-1):
+        pass
+
+    def stop(self):
+        pass
+
+    def pause(self):
+        pass
+
+    def playnext(self):
+        pass
+
+    def playprevious(self):
+        pass
+
+    def playselected(self, selected):
+        pass
+
+    def isPlaying(self):
+        return True
+
+    def isPlayingAudio(self):
+        return True
+
+    def isPlayingVideo(self):
+        return True
+
+    def isPlayingRDS(self):
+        return True
+
+    def isExternalPlayer(self):
+        return True
+
+    def getPlayingFile(self):
+        return ""
+
+    def getTime(self):
+        return 0.0
+
+    def seekTime(self, seekTime):
+        pass
+
+    def setSubtitles(self, subtitleFile):
+        pass
+
+    def showSubtitles(self, bVisible):
+        pass
+
+    def getSubtitles(self):
+        return ""
+
+    def getAvailableSubtitleStreams(self):
+        return []
+
+    def setSubtitleStream(self, iStream):
+        pass
+
+    def updateInfoTag(self, item):
+        pass
+
+    def getTotalTime(self):
+        return 0.0
+
+    def getAvailableAudioStreams(self):
+        return []
+
+    def setAudioStream(self, iStream):
+        pass
+
+    def getAvailableVideoStreams(self):
+        return []
+
+    def setVideoStream(self, iStream):
+        pass
+
+    def onAVChange(self):
+        pass
+
+    def onAVStarted(self):
+        pass
+
+    def onPlayBackEnded(self):
+        pass
+
+    def onPlayBackError(self):
+        pass
+
+    def onPlayBackPaused(self):
+        pass
+
+    def onPlayBackResumed(self):
+        pass
+
+    def onPlayBackSeek(self, time, seekOffset):
+        pass
+
+    def onPlayBackSeekChapter(self, chapter):
+        pass
+
+    def onPlayBackSpeedChanged(self, speed):
+        pass
+
+    def onPlayBackStarted(self):
+        pass
+
+    def onPlayBackStopped(self):
+        pass
+
+    def onQueueNextItem(self):
+        pass
 
 
 class PlayList(object):
