@@ -7,3 +7,5 @@ youtube_dl
 pytz
 six
 pycryptodome
+backports-zoneinfo
+tzdata
